@@ -1,5 +1,7 @@
 
-set(SHARED_LIB reynolds)
+set(SHARED_LIB   reynolds    )
+set(FORTRAN_TEST fortran_test)
+set(CXX_TEST     cxx_test    )
 
 add_library(${SHARED_LIB}
   SHARED
@@ -22,3 +24,28 @@ install(FILES
   DESTINATION lib
   )
 
+add_executable(${FORTRAN_TEST}
+  fortran_test.f90
+  )
+target_link_libraries(${FORTRAN_TEST}
+  PRIVATE
+  ${SHARED_LIB}
+  )
+
+add_executable(${CXX_TEST}
+  cxx_test.cxx
+  )
+target_link_libraries(${CXX_TEST}
+  PRIVATE
+  ${SHARED_LIB}
+  )
+
+add_test(
+  NAME Fortran_Compertibility
+  COMMAND $<TARGET_FILE:${FORTRAN_TEST}>
+  )
+
+add_test(
+  NAME C++_Compertibility
+  COMMAND $<TARGET_FILE:${CXX_TEST}>
+  )
